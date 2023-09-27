@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
 
 async function getData() {
     const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
@@ -22,14 +26,16 @@ export default async function Blog() {
     
     return (
       <>
-        <h1>Blog page</h1>
-            <ul>
-                {posts.map((post: any) => (
-                    <li key={post.id}>
-                        <Link href={`/blog/${post.id}`}>{post.title }</Link>
-                    </li>
-                ))}
-        </ul>
+        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="h1">
+          Blog page
+        </Typography>
+        <List>
+          {posts.map((post: any) => (
+            <ListItem key={post.id}>
+              <Link href={`/blog/${post.id}`}>{post.title}</Link>
+            </ListItem>
+          ))}
+        </List>
       </>
     );
 }
