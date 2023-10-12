@@ -31,9 +31,39 @@ a {
   text-decoration: none;
 }
 
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
 .container {
   max-width: 900px;
   margin: 0 auto;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  height: 26px;
+}
+
+.active::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(255, 255, 255);
 }

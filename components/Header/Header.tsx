@@ -1,5 +1,6 @@
 "use client"; 
 import Link from "next/link"
+import { usePathname } from "next/navigation";
 import { useState } from 'react'
 
 import AppBar from "@mui/material/AppBar";
@@ -13,11 +14,17 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
 import { teal } from "@mui/material/colors";
+import { HomeIconLink } from "./HomeIcon";
+
+const navItems = [
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
+];
 
 const Header = () => {
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const pathname = usePathname();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorElNav(event.currentTarget);
@@ -28,21 +35,11 @@ const Header = () => {
     };
 
     return (
-      //   <header>
-      //     <Link href="/">Home</Link>
-      //     <Link href="/blog">Blog</Link>
-      //     <Link href="/about">About</Link>
-      //   </header>
       <AppBar position="static" sx={{ backgroundColor: `${teal[500]}` }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{ marginRight: 2, display: { xs: "none", sm: "flex" } }}>
-              <Link href="/">
-                <HomeIcon />
-              </Link>
-            </Box>
-
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", sm: "none" } }}>
+            <HomeIconLink />
+            <Box sx={{ display: { xs: "flex", sm: "none" } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -71,41 +68,36 @@ const Header = () => {
                   display: { xs: "block", sm: "none" },
                 }}
               >
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link href="/blog">
-                    <Typography textAlign="center">Blog</Typography>
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link href="/about">
-                    <Typography textAlign="center">About</Typography>
-                  </Link>
-                </MenuItem>
+                {navItems.map((link) => {
+                  return (
+                    <MenuItem onClick={handleCloseNavMenu} key={link.label}>
+                      <Link href={link.href}>
+                        <Typography textAlign="center">{link.label}</Typography>
+                      </Link>
+                    </MenuItem>
+                  );
+                })}
               </Menu>
             </Box>
-            
-            <Box sx={{ display: { xs: "flex", sm: "none" } }}>
-              <Link href="/">
-                <HomeIcon />
-              </Link>
-            </Box>
+
             <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "flex" } }}>
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <Link href="/blog">
-                  <Typography textAlign="center">Blog</Typography>
-                </Link>
-              </Button>
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <Link href="/about">
-                  <Typography textAlign="center">About</Typography>
-                </Link>
-              </Button>
+              {navItems.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Button
+                    key={link.label}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    <Link
+                      href={link.href}
+                      className={`link ${isActive ? "active" : ""}`}
+                    >
+                      <Typography textAlign="center">{link.label}</Typography>
+                    </Link>
+                  </Button>
+                );
+              })}
             </Box>
           </Toolbar>
         </Container>
