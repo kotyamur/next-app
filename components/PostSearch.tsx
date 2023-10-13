@@ -1,24 +1,22 @@
+"use client";
 import { useState, FormEventHandler } from "react";
 
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import { getPostsBySearch } from "@/services/getPosts";
+import { usePosts } from "@/store";
 
-type Props = {
-    onSearch: (value: any[]) => void;
-}
-
-const PostSearch = ({onSearch}: Props) => {
-    const [search, setSearch] = useState("");
-    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-        e.preventDefault();
-        const posts = await getPostsBySearch(search);
-        onSearch(posts);
-    }
+const PostSearch = () => {
+  const [search, setSearch] = useState("");
+  const getPostsBySearch = usePosts((state) => state.getPostsBySearch);
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    await getPostsBySearch(search);
+  };
   return (
-    <Paper onSubmit={handleSubmit}
+    <Paper
+      onSubmit={handleSubmit}
       component="form"
       sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 300 }}
     >
