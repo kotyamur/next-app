@@ -1,18 +1,22 @@
 "use client";
+import useSWR from "swr"; 
 import { useState, FormEventHandler } from "react";
 
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import { usePosts } from "@/store";
+import { getPostsBySearch } from "@/services/getPosts";
+// import { usePosts } from "@/store";
 
 const PostSearch = () => {
+    const {mutate } = useSWR("posts");
   const [search, setSearch] = useState("");
-  const getPostsBySearch = usePosts((state) => state.getPostsBySearch);
+//   const getPostsBySearch = usePosts((state) => state.getPostsBySearch);
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    await getPostsBySearch(search);
+      const posts = await getPostsBySearch(search);
+      mutate(posts);
   };
   return (
     <Paper
